@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven 3.8.1'
+    }
+
+    environment {
+        SONARQUBE = 'SonarQube'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/iDL08/Project-test.git'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${SONARQUBE}") {
+                    sh 'mvn clean verify sonar:sonar'
+                }
+            }
+        }
+    }
+}
