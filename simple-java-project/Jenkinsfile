@@ -20,8 +20,9 @@ pipeline {
             steps {
                 dir('simple-java-project') {
                     withSonarQubeEnv("${SONARQUBE}") {
-                        sh 'ls -la' // Optional: to verify pom.xml is present
-                        sh 'mvn clean verify sonar:sonar'
+                        withCredentials([string(credentialsId: 'Sonartoken', variable: 'SONAR_TOKEN')]) {
+                            sh 'mvn clean verify sonar:sonar -Dsonar.token=$SONAR_TOKEN'
+                        }
                     }
                 }
             }
