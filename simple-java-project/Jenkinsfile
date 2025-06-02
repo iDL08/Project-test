@@ -12,16 +12,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-             git branch: 'main', url: 'https://github.com/iDL08/Project-test.git'
+                git branch: 'main', url: 'https://github.com/iDL08/Project-test.git'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("${SONARQUBE}") {
-                    sh 'mvn clean verify sonar:sonar'
+                dir('simple-java-project') {
+                    withSonarQubeEnv("${SONARQUBE}") {
+                        sh 'ls -la' // Optional: to verify pom.xml is present
+                        sh 'mvn clean verify sonar:sonar'
+                    }
                 }
             }
         }
     }
 }
+
